@@ -187,10 +187,6 @@ var SETTLE_PG = {
 		iframeContainer.style.position = "relative";
 		iframeContainer.style.display = "inline-block";
   		
-  		var styleSheet = document.createElement('style');
-  		styleSheet.textContent = '@media print { /* ... */ }';
-  		document.body.appendChild(styleSheet, 'beforeend');
-
 		var iframe = document.createElement("iframe");
 		iframe.setAttribute("frameborder", "0");
 		iframe.setAttribute("scrolling", "auto");
