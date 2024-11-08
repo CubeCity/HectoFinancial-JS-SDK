@@ -181,6 +181,7 @@ var SETTLE_PG = {
 		ifrDiv.style.display = "flex";
 		ifrDiv.style.alignItems = "center";
 		ifrDiv.style.justifyContent = "center";
+		ifrDiv.style.transitionDuration = "0.75s";
 
 		var iframeContainer = document.createElement("div");
 		iframeContainer.style.position = "relative";
