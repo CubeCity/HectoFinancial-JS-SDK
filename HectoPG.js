@@ -237,7 +237,7 @@ var SETTLE_PG = {
 			"#" + this._IFRAME_DIV_ID + ", " +
 			"#" + this._IFRAME_ID + " { " +
 				"width: 100vw !important; " +
-				"height: 100vh !important; " +
+				"height: 101vh !important; " +
 			"} " +
 			"#" + this._IFRAME_ID + " { " +
 				"padding-bottom: 5vh; " +
