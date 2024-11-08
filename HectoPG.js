@@ -1,5 +1,5 @@
 /**
- * HectoPG v1.3
+ * HectoPG_v1.3.1.js
  * 
  * BSD 3-Clause License
  * 
@@ -242,6 +242,9 @@ var SETTLE_PG = {
 			"#" + this._IFRAME_ID + " { " +
 				"width: 100vw !important; " +
 				"height: 100vh !important; " +
+			"} " +
+			"#" + this._IFRAME_ID + " { " +
+				"padding-bottom: 5vh; " +
 			"} " +
 			"#" + this._IFRAME_DIV_ID + " { " +
 				"top: 0 !important; " +
