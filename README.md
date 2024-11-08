@@ -3,12 +3,12 @@
 
 # 설치 방법
 ## 스크립트 내려받기
-   [여기를 눌러](https://cdn.jsdelivr.net/gh/CubeCity/HectoFinancial-JS-SDK/dist/HectoPG.min.js) 압축된 최신 SDK 파일을 내려받고 웹사이트에 `<script>` 태그로 적용하세요.
+   [여기를 눌러](https://cdn.jsdelivr.net/gh/CubeCity/HectoFinancial-JS-SDK@latest/HectoPG.min.js) 압축된 최신 SDK 파일을 내려받고 웹사이트에 `<script>` 태그로 적용하세요.
 
 ## jsDelivr CDN 사용하기
    HTML 파일에 아래와 같이 직접 링크를 추가할 수 있습니다.
    ```html
-   <script src="https://cdn.jsdelivr.net/gh/CubeCity/HectoFinancial-JS-SDK/dist/HectoPG.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/gh/CubeCity/HectoFinancial-JS-SDK@latest/HectoPG.min.js"></script>
    ```
 
 # 사용 방법
