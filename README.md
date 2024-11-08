@@ -25,4 +25,4 @@ ui: {
  * 네이버페이 결제 시 헥토파이낸셜측에서 결제 화면을 `iframe` 형태로 보내주는 관계로, 네이버페이 결제 시 `iframe`을 사용할 수 없습니다.
 
 # 라이선스
-[BSD 라이선스](https://github.com/CubeCity/HectoFinancial-JS-SDK/blob/main/LICENSE)
+[BSD 3-Clause 라이선스](https://github.com/CubeCity/HectoFinancial-JS-SDK/blob/main/LICENSE)
