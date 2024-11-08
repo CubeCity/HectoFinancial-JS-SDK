@@ -236,11 +236,8 @@ var SETTLE_PG = {
 		var mediaQuery = "@media (max-width: 500px) { " +
 			"#" + this._IFRAME_DIV_ID + ", " +
 			"#" + this._IFRAME_ID + " { " +
-				"width: 100vw !important; " +
-				"height: 101vh !important; " +
-			"} " +
-			"#" + this._IFRAME_ID + " { " +
-				"padding-bottom: 5vh; " +
+				"width: 100dvw !important; " +
+				"height: 100dvh !important; " +
 			"} " +
 			"#" + this._IFRAME_DIV_ID + " { " +
 				"top: 0 !important; " +
