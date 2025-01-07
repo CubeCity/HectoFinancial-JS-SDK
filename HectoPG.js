@@ -51,6 +51,7 @@ var SETTLE_PG = {
 	_DIM_ID: "SETTLE_LAYER_DIM",
 	_IFRAME_ID: "SETTLE_IFRAME",
 	_IFRAME_DIV_ID: "SETTLE_IFRAME_DIV",
+	_CLS_BTN_DIV: "SETTLE_CLS_BTN_DIV",
 	_FORM_ID: "SETTLE_FORM",
 	_POPUP_ID: "SETTLE_POPUP",
 	_CALLBACK: null,
@@ -167,105 +168,87 @@ var SETTLE_PG = {
 	},
 
 	makeIframe: function (obj) {
-		var el = document.getElementById(this._SETTLE_AREA_ID);
-		var ifrDiv = document.createElement("div");
-		ifrDiv.setAttribute("id", this._IFRAME_DIV_ID);
-		ifrDiv.style.position = "fixed";
-		ifrDiv.style.width = "100%";
-		ifrDiv.style.height = "100%";
-		ifrDiv.style.top = "0";
-		ifrDiv.style.left = "0";
-		ifrDiv.style.zIndex = "100001";
-		ifrDiv.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-		ifrDiv.style.backdropFilter = "blur(10px)";
-		ifrDiv.style.display = "flex";
-		ifrDiv.style.alignItems = "center";
-		ifrDiv.style.justifyContent = "center";
-		// ifrDiv.style.transitionDuration = "0.75s";
+	    var el = document.getElementById(this._SETTLE_AREA_ID);
+	    var ifrDiv = document.createElement("div");
+		var r = obj.ui.cornerRadius ? obj.ui.cornerRadius + "px" : "0px";
+		
+	    ifrDiv.setAttribute("id", this._IFRAME_DIV_ID);
+	    ifrDiv.style.position = "fixed";
+	    ifrDiv.style.width = "100%";
+	    ifrDiv.style.height = "100%";
+	    ifrDiv.style.top = "0";
+	    ifrDiv.style.left = "0";
+	    ifrDiv.style.zIndex = "100001";
+	    ifrDiv.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+	    ifrDiv.style.backdropFilter = "blur(10px)";
+	    ifrDiv.style.display = "flex";
+	    ifrDiv.style.alignItems = "center";
+	    ifrDiv.style.justifyContent = "center";
+	
+	    var iframeWrapper = document.createElement("div");
+	    iframeWrapper.style.position = "relative";
+	    iframeWrapper.style.backgroundColor = "#fff";
+	    iframeWrapper.style.width = (obj.ui.width ? obj.ui.width : "400") + "px";
+	    iframeWrapper.style.height = (obj.ui.height ? (parseInt(obj.ui.height) + 50).toString() : "700") + "px";
+	    iframeWrapper.style.paddingTop = "30px";
+	    iframeWrapper.style.borderRadius = r;
+	
+	    var closeButtonContainer = document.createElement("div");
+	    closeButtonContainer.setAttribute("id", this._CLS_BTN_DIV);
+	    closeButtonContainer.style.position = "absolute";
+	    closeButtonContainer.style.top = "0";
+	    closeButtonContainer.style.width = "100%";
+	    closeButtonContainer.style.height = "30px";
+	    closeButtonContainer.style.backgroundColor = "#fff";
+	    closeButtonContainer.style.display = "flex";
+	    closeButtonContainer.style.alignItems = "center";
+	    closeButtonContainer.style.justifyContent = "flex-end";
+	    closeButtonContainer.style.paddingRight = "10px";
+		closeButtonContainer.style.borderTopLeftRadius = r;
+		closeButtonContainer.style.borderTopRightRadius = r;
 
-		var iframeContainer = document.createElement("div");
-		iframeContainer.style.position = "relative";
-		iframeContainer.style.display = "inline-block";
-  		
-		var iframe = document.createElement("iframe");
-		iframe.setAttribute("frameborder", "0");
-		iframe.setAttribute("scrolling", "auto");
-		iframe.setAttribute("id", this._IFRAME_ID);
-		iframe.setAttribute("name", this._IFRAME_ID);
-		iframe.style.backgroundColor = "#fff";
-		iframe.style.borderRadius = obj.ui.cornerRadius ? obj.ui.cornerRadius + "px" : "0px";
-		iframe.style.width = (obj.ui.width ? obj.ui.width : '400') + "px";
-		iframe.style.height = (obj.ui.height ? obj.ui.height : '700') + "px";
-		this.addMediaQuery();
+		var closeButton = document.createElement("a");
+		closeButton.innerHTML =
+			'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+			'<line x1="3" y1="3" x2="17" y2="17" stroke="#b1b8c0" stroke-width="3" />' +
+			'<line x1="3" y1="17" x2="17" y2="3" stroke="#b1b8c0" stroke-width="3" />' +
+			'</svg>';
+		closeButton.style.cursor = "pointer";
+		closeButton.style.zIndex = "100002";
+		closeButton.title = "결제창 닫기";
 
-		iframe.onload = function() {
-			console.log("Payment UI Loaded Successfully!");
+		closeButton.onclick = function () {
+			var ifrDiv = document.getElementById(SETTLE_PG._IFRAME_DIV_ID);
+			ifrDiv.remove();
+			window.parent.postMessage(JSON.stringify({ action: "HECTO_IFRAME_CLOSE" }), "*");
 		};
+	
+		closeButtonContainer.appendChild(closeButton);
+	
+	    var iframe = document.createElement("iframe");
+	    iframe.setAttribute("frameborder", "0");
+	    iframe.setAttribute("scrolling", "auto");
+	    iframe.setAttribute("id", this._IFRAME_ID);
+	    iframe.setAttribute("name", this._IFRAME_ID);
+	    iframe.style.width = "100%";
+	    iframe.style.height = "100%";
+	    iframe.style.backgroundColor = "#fff";
+		iframe.style.borderBottomLeftRadius = r;
+		iframe.style.borderBottomRightRadius = r;
 
-		iframeContainer.appendChild(iframe);
-
-		if (obj.ui.showCloseButton === true) {
-			var closeButton = document.createElement("button");
-			closeButton.innerHTML =
-				'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-				'<line x1="1" y1="1" x2="23" y2="23" stroke="black" stroke-width="2" />' +
-				'<line x1="1" y1="23" x2="23" y2="1" stroke="black" stroke-width="2" />' +
-				'</svg>';
-			closeButton.style.position = "absolute";
-			closeButton.style.top = "10px";
-			closeButton.style.right = "10px";
-			closeButton.style.zIndex = "100002";
-			closeButton.style.background = "#fcfcfc";
-			closeButton.style.border = "1px solid #ccc";
-			closeButton.style.borderRadius = "4px";
-			closeButton.style.padding = "5px";
-			closeButton.style.cursor = "pointer";
-			closeButton.onclick = function () {
-				var ifrDiv = document.getElementById(SETTLE_PG._IFRAME_DIV_ID);
-				
-				var confirmOverlay = document.createElement("div");
-				confirmOverlay.style.position = "absolute";
-				confirmOverlay.style.top = "0";
-				confirmOverlay.style.left = "0";
-				confirmOverlay.style.width = "100%";
-				confirmOverlay.style.height = "100%";
-				confirmOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-				confirmOverlay.style.display = "flex";
-				confirmOverlay.style.alignItems = "center";
-				confirmOverlay.style.justifyContent = "center";
-				confirmOverlay.style.zIndex = "100003";
-
-				var confirmDialog = document.createElement("div");
-				confirmDialog.style.backgroundColor = "#fff";
-				confirmDialog.style.padding = "20px 35px";
-				confirmDialog.style.borderRadius = "8px";
-				confirmDialog.style.textAlign = "center";
-				confirmDialog.style.minWidth = "200px";
-				confirmDialog.innerHTML = 
-					'<p style="font-size: 16px; margin-bottom: 20px; color: #333;"><strong>정말 결제를 종료할까요?</strong><br>다시 결제하려면 처음부터 다시 시도해야 해요.</p>' +
-					'<button id="confirmCancel" style="padding: 8px 36px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; margin-right: 10px; cursor: pointer;">취소</button>' +
-					'<button id="confirmOk" style="padding: 8px 36px; background-color: #ff9e00; border: 1px solid #f79c42; border-radius: 4px; font-size: 14px; color: white; cursor: pointer;">확인</button>';
-
-				confirmOverlay.appendChild(confirmDialog);
-				ifrDiv.appendChild(confirmOverlay);
-
-				document.getElementById("confirmCancel").onclick = function () {
-					ifrDiv.removeChild(confirmOverlay);
-				};
-
-				document.getElementById("confirmOk").onclick = function () {
-					window.parent.postMessage(JSON.stringify({ action: "HECTO_IFRAME_CLOSE" }), "*");
-					ifrDiv.removeChild(confirmOverlay);
-				};
-			};
-			iframeContainer.appendChild(closeButton);
-		}
-
-		ifrDiv.appendChild(iframeContainer);
-		el.appendChild(ifrDiv);
-
-		window.addEventListener("resize", this.iframeResize);
-		SETTLE_PG.addPostMessage();
+	    iframe.onload = function () {
+	        console.log("Payment UI Loaded Successfully!");
+	    };
+	    
+	    this.addMediaQuery();
+	
+	    iframeWrapper.appendChild(closeButtonContainer);
+	    iframeWrapper.appendChild(iframe);
+	    ifrDiv.appendChild(iframeWrapper);
+	    el.appendChild(ifrDiv);
+	
+	    window.addEventListener("resize", this.iframeResize);
+	    SETTLE_PG.addPostMessage();
 	},
 	
 	addMediaQuery: function () {
@@ -278,11 +261,16 @@ var SETTLE_PG = {
 				"width: 100dvw !important; " +
 				"height: 101dvh !important; " +
 			"} " +
-			"#" + this._IFRAME_DIV_ID + " { " +
+			"#" + this._IFRAME_ID + " { " +
 				"top: 0 !important; " +
 				"left: 0 !important; " +
 				"bottom: 0 !important; " +
 				"right: 0 !important; " +
+				"position: fixed;" +
+				""
+			"} " +
+			"#" + this._CLS_BTN_DIV + " { " +
+				"display: none;" +
 			"} " +
 		"}";
 
