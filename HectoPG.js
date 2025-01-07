@@ -168,42 +168,43 @@ var SETTLE_PG = {
 	},
 
 	makeIframe: function (obj) {
-	    var el = document.getElementById(this._SETTLE_AREA_ID);
-	    var ifrDiv = document.createElement("div");
+		var el = document.getElementById(this._SETTLE_AREA_ID);
+		var ifrDiv = document.createElement("div");
 		var r = obj.ui.cornerRadius ? obj.ui.cornerRadius + "px" : "0px";
-		
-	    ifrDiv.setAttribute("id", this._IFRAME_DIV_ID);
-	    ifrDiv.style.position = "fixed";
-	    ifrDiv.style.width = "100%";
-	    ifrDiv.style.height = "100%";
-	    ifrDiv.style.top = "0";
-	    ifrDiv.style.left = "0";
-	    ifrDiv.style.zIndex = "100001";
-	    ifrDiv.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-	    ifrDiv.style.backdropFilter = "blur(10px)";
-	    ifrDiv.style.display = "flex";
-	    ifrDiv.style.alignItems = "center";
-	    ifrDiv.style.justifyContent = "center";
-	
-	    var iframeWrapper = document.createElement("div");
-	    iframeWrapper.style.position = "relative";
-	    iframeWrapper.style.backgroundColor = "#fff";
-	    iframeWrapper.style.width = (obj.ui.width ? obj.ui.width : "400") + "px";
-	    iframeWrapper.style.height = (obj.ui.height ? (parseInt(obj.ui.height) + 50).toString() : "700") + "px";
-	    iframeWrapper.style.paddingTop = "30px";
-	    iframeWrapper.style.borderRadius = r;
-	
-	    var closeButtonContainer = document.createElement("div");
-	    closeButtonContainer.setAttribute("id", this._CLS_BTN_DIV);
-	    closeButtonContainer.style.position = "absolute";
-	    closeButtonContainer.style.top = "0";
-	    closeButtonContainer.style.width = "100%";
-	    closeButtonContainer.style.height = "30px";
-	    closeButtonContainer.style.backgroundColor = "#fff";
-	    closeButtonContainer.style.display = "flex";
-	    closeButtonContainer.style.alignItems = "center";
-	    closeButtonContainer.style.justifyContent = "flex-end";
-	    closeButtonContainer.style.paddingRight = "10px";
+
+		ifrDiv.setAttribute("id", this._IFRAME_DIV_ID);
+		ifrDiv.style.position = "fixed";
+		ifrDiv.style.width = "100%";
+		ifrDiv.style.height = "100%";
+		ifrDiv.style.top = "0";
+		ifrDiv.style.left = "0";
+		ifrDiv.style.zIndex = "100001";
+		ifrDiv.style.transition = "background-color 0.3s ease, backdrop-filter 0.3s ease";
+		ifrDiv.style.display = "flex";
+		ifrDiv.style.alignItems = "center";
+		ifrDiv.style.justifyContent = "center";
+		ifrDiv.style.backgroundColor = "transparent";
+		ifrDiv.style.backdropFilter = "blur(0px)";
+
+		var iframeWrapper = document.createElement("div");
+		iframeWrapper.style.position = "relative";
+		iframeWrapper.style.backgroundColor = "#fff";
+		iframeWrapper.style.width = (obj.ui.width ? obj.ui.width : "400") + "px";
+		iframeWrapper.style.height = (obj.ui.height ? (parseInt(obj.ui.height) + 50).toString() : "700") + "px";
+		iframeWrapper.style.paddingTop = "30px";
+		iframeWrapper.style.borderRadius = r;
+
+		var closeButtonContainer = document.createElement("div");
+		closeButtonContainer.setAttribute("id", this._CLS_BTN_DIV);
+		closeButtonContainer.style.position = "absolute";
+		closeButtonContainer.style.top = "0";
+		closeButtonContainer.style.width = "100%";
+		closeButtonContainer.style.height = "30px";
+		closeButtonContainer.style.backgroundColor = "#fff";
+		closeButtonContainer.style.display = "flex";
+		closeButtonContainer.style.alignItems = "center";
+		closeButtonContainer.style.justifyContent = "flex-end";
+		closeButtonContainer.style.paddingRight = "10px";
 		closeButtonContainer.style.borderTopLeftRadius = r;
 		closeButtonContainer.style.borderTopRightRadius = r;
 
@@ -222,35 +223,39 @@ var SETTLE_PG = {
 			ifrDiv.remove();
 			window.parent.postMessage(JSON.stringify({ action: "HECTO_IFRAME_CLOSE" }), "*");
 		};
-	
+
 		closeButtonContainer.appendChild(closeButton);
-	
-	    var iframe = document.createElement("iframe");
-	    iframe.setAttribute("frameborder", "0");
-	    iframe.setAttribute("scrolling", "auto");
-	    iframe.setAttribute("id", this._IFRAME_ID);
-	    iframe.setAttribute("name", this._IFRAME_ID);
-	    iframe.style.width = "100%";
-	    iframe.style.height = "100%";
-	    iframe.style.backgroundColor = "#fff";
+
+		var iframe = document.createElement("iframe");
+		iframe.setAttribute("frameborder", "0");
+		iframe.setAttribute("scrolling", "auto");
+		iframe.setAttribute("id", this._IFRAME_ID);
+		iframe.setAttribute("name", this._IFRAME_ID);
+		iframe.style.width = "100%";
+		iframe.style.height = "100%";
+		iframe.style.backgroundColor = "#fff";
 		iframe.style.borderBottomLeftRadius = r;
 		iframe.style.borderBottomRightRadius = r;
 
-	    iframe.onload = function () {
-	        console.log("Payment UI Loaded Successfully!");
-	    };
-	    
-	    this.addMediaQuery();
-	
-	    iframeWrapper.appendChild(closeButtonContainer);
-	    iframeWrapper.appendChild(iframe);
-	    ifrDiv.appendChild(iframeWrapper);
-	    el.appendChild(ifrDiv);
-	
-	    window.addEventListener("resize", this.iframeResize);
-	    SETTLE_PG.addPostMessage();
+		iframe.onload = function () {
+			console.log("Payment UI Loaded Successfully!");
+		};
+
+		this.addMediaQuery();
+
+		iframeWrapper.appendChild(closeButtonContainer);
+		iframeWrapper.appendChild(iframe);
+		ifrDiv.appendChild(iframeWrapper);
+		el.appendChild(ifrDiv);
+
+		void ifrDiv.offsetHeight;
+		ifrDiv.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+		ifrDiv.style.backdropFilter = "blur(10px)";
+
+		window.addEventListener("resize", this.iframeResize);
+		SETTLE_PG.addPostMessage();
 	},
-	
+
 	addMediaQuery: function () {
 		var style = document.createElement('style');
 		style.type = 'text/css';
@@ -267,7 +272,7 @@ var SETTLE_PG = {
 				"bottom: 0 !important; " +
 				"right: 0 !important; " +
 				"position: fixed;" +
-				""
+				"" +
 			"} " +
 			"#" + this._CLS_BTN_DIV + " { " +
 				"display: none;" +
